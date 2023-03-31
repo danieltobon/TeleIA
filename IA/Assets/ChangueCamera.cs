@@ -5,14 +5,14 @@ using UnityEngine;
 public class ChangueCamera : MonoBehaviour
 {
     public List<GameObject> cameras;
-    float MaxTimeSecund;
+    
     public  float currentTimePrincip;
     public float currentTimeSecund;
     public GameObject camActive;
     public float randTimpePrinMax;
     public float randTimpeSecunMax;
     public GameObject player;
-    public GameObject image;
+    
     public float speedPlayer;
     void Start()
     {
@@ -59,9 +59,7 @@ public class ChangueCamera : MonoBehaviour
         player.transform.rotation = Quaternion.Slerp(player.transform.rotation, rotation, Time.deltaTime * speedPlayer);
         player.transform.eulerAngles = new Vector3(0, player.transform.eulerAngles.y, 0); // lock x and z axis to
         
-        image.transform.rotation = Quaternion.Slerp(image.transform.rotation, rotation, Time.deltaTime * speedPlayer);
-        image.transform.eulerAngles = new Vector3(0, image.transform.eulerAngles.y, 0); // lock x and z axis to
-
+       
     }
 
     void activeCamara(GameObject cam)
