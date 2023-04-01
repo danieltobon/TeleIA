@@ -19,6 +19,7 @@ namespace OpenAI
         bool barShowBool;
 
         public Animator anim;
+        public Animator animMen;
         public Animator animUI;
         public float speedFillImage;
         public SkinnedMeshRenderer skin;
@@ -190,8 +191,9 @@ namespace OpenAI
            
             starMouth = true;
             anim.SetBool("Start", true);
-           
-          spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"));
+            animMen.SetBool("Start", false);
+
+            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"),pitch: 1.3f);
             if (noticias.Contains(message))
             {
                 barShowBool = false;
@@ -212,11 +214,12 @@ namespace OpenAI
         
         public void speakMen(string message)
         {
-
+            starMouth = false;
+            anim.SetBool("Start",false);
             starMouthMen = true;
-            //animMen.SetBool("Start", true);
+            animMen.SetBool("Start", true);
 
-            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE,fallbackCulture:"es"));
+            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture: "es"), pitch: 1.3f);
             timeSpeakingCharly = spk.ApproximateSpeechLength(message);
 
         }
@@ -277,6 +280,12 @@ namespace OpenAI
                 " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
             messages.Add(newmsg);
             ChatMessage newmsg2;
+
+         
+            newmsg2.Role = "system";
+            newmsg2.Content = "Utiliza palabras coloquiales de paises como mexico, argentina, colombia y españa";
+            messages.Add(newmsg2);
+           
             newmsg.Role = "assistant";
             //newmsg.Content = "Esto es insolito, en españa un tio se lanzo desde un paracaidas";
             messages.Add(newmsg);
@@ -320,10 +329,10 @@ namespace OpenAI
                 {
                     listChatResponse.Add(name + ": " + content, message.Content);
                     noticias.Add(message.Content);
-                    string path = "C:/Users/danie/OneDrive/Escritorio/IA.txt";
+                  /*  string path = "C:/Users/danie/OneDrive/Escritorio/IA.txt";
                     StreamWriter writer = new StreamWriter(path, true);
                     writer.WriteLine(name + ": " + content+" Respuesta " + message.Content);
-                    writer.Close();
+                    writer.Close();*/
 
                     timeToAnswer = 3;
                     isChat = false;
@@ -331,10 +340,10 @@ namespace OpenAI
                 else
                 {
                     noticias.Add(message.Content);
-                    string path = "C:/Users/danie/OneDrive/Escritorio/IA.txt";
+                  /*  string path = "C:/Users/danie/OneDrive/Escritorio/IA.txt";
                     StreamWriter writer = new StreamWriter(path, true);
                     writer.WriteLine("Noticia: "+ message.Content);
-                    writer.Close();
+                    writer.Close();*/
                 }
                // message.Role = "assistant";
                // messages.Add(message);

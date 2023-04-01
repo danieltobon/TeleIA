@@ -12,7 +12,7 @@ public class ChangueCamera : MonoBehaviour
     public float randTimpePrinMax;
     public float randTimpeSecunMax;
     public GameObject player;
-    
+    public GameObject player2;
     public float speedPlayer;
     void Start()
     {
@@ -58,8 +58,10 @@ public class ChangueCamera : MonoBehaviour
         var rotation = Quaternion.LookRotation(camActive.transform.position - player.transform.position);
         player.transform.rotation = Quaternion.Slerp(player.transform.rotation, rotation, Time.deltaTime * speedPlayer);
         player.transform.eulerAngles = new Vector3(0, player.transform.eulerAngles.y, 0); // lock x and z axis to
-        
        
+        var rotation2 = Quaternion.LookRotation(camActive.transform.position - player2.transform.position);
+        player2.transform.rotation = Quaternion.Slerp(player2.transform.rotation, rotation2, Time.deltaTime * speedPlayer);
+        player2.transform.eulerAngles = new Vector3(0, player2.transform.eulerAngles.y, 0); // lock x and z axis to
     }
 
     void activeCamara(GameObject cam)
@@ -73,7 +75,7 @@ public class ChangueCamera : MonoBehaviour
                 cameras[i].SetActive(false);
             else cam.SetActive(true);
         }
-        currentTimePrincip = Random.Range(5, 40);
-        currentTimeSecund = Random.Range(3, 10);
+        currentTimePrincip = Random.Range(5, 30);
+        currentTimeSecund = Random.Range(3, 15);
     }
 }
