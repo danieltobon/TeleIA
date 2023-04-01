@@ -10,8 +10,9 @@ namespace OpenAI
     public class ChatGPT : MonoBehaviour
     {
 
-        
-
+        public int countAnswer = 0;
+        public float timeSpeakingCarmen=10;
+        public float timeSpeakingCharly=0;
         public Image imageBar;
         public TextMeshProUGUI textChatUI;
         public float speedBar;
@@ -24,6 +25,7 @@ namespace OpenAI
         public List<string> noticias= new List<string>();
         public Dictionary<string, string> listChatResponse = new Dictionary<string, string>();
         public AudioSource aud;
+        public AudioSource audMen;
         public string VoiceName;
       
 
@@ -43,7 +45,7 @@ namespace OpenAI
 
         bool closedMouth;
         bool starMouth;
-
+        bool starMouthMen;
         public float speedEyes = 0;
         public float speedMouth = 0;
         public float MaxtimeNextNotice = 0;
@@ -52,7 +54,9 @@ namespace OpenAI
         bool replyIsWorking;
         float timeToAnswer = 7;
         float timeNextAnswer = 3;
-       
+
+        string msgForCharly;
+        public string answerForCharly;
         private void Start()
         {
            
@@ -60,6 +64,64 @@ namespace OpenAI
 
             SendReply();
          
+        }
+        private void Update()
+        {
+        
+            if (listChatInteraction.Count > 0 && timeNextAnswer < 0)
+            {
+                SendReply();
+
+            }
+            if (timeNextAnswer > 0)
+            {
+                timeNextAnswer -= Time.deltaTime;
+
+            }
+            if (timeNextNotice > 0)
+            {
+                timeNextNotice -= Time.deltaTime;
+
+            }
+            else if (noticias.Count < 4)
+            {
+                SendReply();
+            }
+            updateBlendShapes();
+
+
+            if (!spk.isBusy && countAnswer==0)
+            {
+                if (listChatResponse.Count > 0)
+                {
+
+                    speak(listChatResponse.ElementAt(0).Value);
+
+                }
+                else if (noticias.Count > 0)
+                {
+
+                    speak(noticias.ElementAt(0));
+                }
+            }
+            if (countAnswer == 1)
+            {
+                timeSpeakingCarmen -= Time.deltaTime;
+                if(timeSpeakingCarmen<=0) countAnswer = 2;
+            }
+            if (countAnswer == 2)
+            {
+                timeSpeakingCharly -= Time.deltaTime;
+                if (timeSpeakingCharly <= -1) countAnswer = 0;
+            }
+
+
+            if (timeSpeakingCarmen <= 0) {
+                speakMen(answerForCharly);
+                timeSpeakingCarmen = 10;
+            }
+          
+
         }
         void updateBlendShapes() {
             if (weightEyes<100 && closedEyes==false ) {
@@ -118,46 +180,7 @@ namespace OpenAI
 
             if (timeToAnswer > 0) timeToAnswer += -Time.deltaTime;
         }
-        private void Update()
-        {
-            Debug.Log("CHATINTERAICON COUNT: " + listChatInteraction.Count);
-            if (listChatInteraction.Count > 0 && timeNextAnswer<0 )
-            {
-                SendReply();
-                
-            }
-            if (timeNextAnswer > 0)
-            {
-                timeNextAnswer -= Time.deltaTime;
-
-            }
-            if (timeNextNotice > 0 ) {
-                timeNextNotice -= Time.deltaTime;
-
-            }
-            else if(noticias.Count < 4)
-            {
-                SendReply();
-            }
-            updateBlendShapes();
-
-
-            if (!spk.isBusy)
-            {
-                if (listChatResponse.Count > 0 && timeToAnswer < 0)
-                {
-                    
-                    speak(listChatResponse.ElementAt(0).Value);
-                    
-                }
-                else if (noticias.Count > 0)
-                {
-                   
-                    speak(noticias.ElementAt(0));
-                }
-            }
-
-        }
+       
         public void barShow(string text) {
             textChatUI.text = text;
             barShowBool = true;
@@ -167,7 +190,7 @@ namespace OpenAI
            
             starMouth = true;
             anim.SetBool("Start", true);
-
+           
           spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"));
             if (noticias.Contains(message))
             {
@@ -182,8 +205,61 @@ namespace OpenAI
                 var item = listChatResponse.FirstOrDefault(kvp => kvp.Value == message);
                 listChatResponse.Remove(item.Key);
                }
+            countAnswer = 1;
+            timeSpeakingCarmen = spk.ApproximateSpeechLength(message);
+            SendReplyMen(message);
         }
+        
+        public void speakMen(string message)
+        {
 
+            starMouthMen = true;
+            //animMen.SetBool("Start", true);
+
+            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE,fallbackCulture:"es"));
+            timeSpeakingCharly = spk.ApproximateSpeechLength(message);
+
+        }
+        public async void SendReplyMen(string msg)
+        {
+            List<ChatMessage> messages = new List<ChatMessage>();
+           
+
+            var newMessage = new ChatMessage();
+            newMessage.Role = "user";
+            var newmsg = new ChatMessage();
+            newmsg.Role = "system";
+            newmsg.Content = "Eres charly ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar hacerca de la noticia que acaba de dar carmen";
+            messages.Add(newmsg);
+
+            newMessage.Content = " Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
+
+
+            Debug.Log("Solicitud: " + newMessage.Content);
+
+
+            messages.Add(newMessage);
+
+            var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
+            {
+                Model = "gpt-3.5-turbo-0301",
+                Messages = messages,
+
+
+            });
+
+            if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
+            {
+                var message = completionResponse.Choices[0].Message;
+                message.Content = message.Content.Trim();
+                answerForCharly = message.Content;
+               
+            }
+
+
+
+
+        }
         public async void SendReply()
         {
             List<ChatMessage> messages = new List<ChatMessage>();
@@ -198,7 +274,7 @@ namespace OpenAI
             ChatMessage newmsg;
             newmsg.Role = "system";
             newmsg.Content = "Responde todo en maximo 8 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro," +
-                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
+                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
             messages.Add(newmsg);
             ChatMessage newmsg2;
             newmsg.Role = "assistant";
@@ -238,7 +314,7 @@ namespace OpenAI
             if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
             {
                 var message = completionResponse.Choices[0].Message;
-                message.Content = message.Content.Trim();
+                message.Content = message.Content.Trim() + " Que opinas charly";
 
                 if (isChat)
                 {
