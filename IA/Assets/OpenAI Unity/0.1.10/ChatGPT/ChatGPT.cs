@@ -57,13 +57,13 @@ namespace OpenAI
         float timeNextAnswer = 3;
 
         string msgForCharly;
-        public string answerForCharly;
+        public string answerForCharly="Soy estupido";
         private void Start()
         {
            
 
 
-            SendReply();
+            SendReply("");
          
         }
         private void Update()
@@ -71,7 +71,7 @@ namespace OpenAI
         
             if (listChatInteraction.Count > 0 && timeNextAnswer < 0)
             {
-                SendReply();
+                SendReply(answerForCharly);
 
             }
             if (timeNextAnswer > 0)
@@ -86,7 +86,7 @@ namespace OpenAI
             }
             else if (noticias.Count < 4)
             {
-                SendReply();
+                SendReply(answerForCharly);
             }
             updateBlendShapes();
 
@@ -219,7 +219,7 @@ namespace OpenAI
             starMouthMen = true;
             animMen.SetBool("Start", true);
 
-            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture: "es"), pitch: 1.3f);
+            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture:"es" ), pitch: 1.5f);
             timeSpeakingCharly = spk.ApproximateSpeechLength(message);
 
         }
@@ -232,10 +232,10 @@ namespace OpenAI
             newMessage.Role = "user";
             var newmsg = new ChatMessage();
             newmsg.Role = "system";
-            newmsg.Content = "Eres charly ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar hacerca de la noticia que acaba de dar carmen";
+            newmsg.Content = "Eres charly ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar hacerca de la noticia que acaba de dar carmen, carmen te trata mal porque no sabes hablar español";
             messages.Add(newmsg);
 
-            newMessage.Content = " Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
+            newMessage.Content = " En maximo 3 renglones Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
 
 
             Debug.Log("Solicitud: " + newMessage.Content);
@@ -263,8 +263,10 @@ namespace OpenAI
 
 
         }
-        public async void SendReply()
+        public async void SendReply(string msg)
         {
+
+
             List<ChatMessage> messages = new List<ChatMessage>();
             replyIsWorking = true;
             bool isChat = false;
@@ -276,8 +278,8 @@ namespace OpenAI
             newMessage.Role = "user";
             ChatMessage newmsg;
             newmsg.Role = "system";
-            newmsg.Content = "Responde todo en maximo 8 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro," +
-                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
+            newmsg.Content = "Responde todo en maximo 4 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro," +
+                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly que te cae mal, no sabe hablar y es estupido, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
             messages.Add(newmsg);
             ChatMessage newmsg2;
 
@@ -301,7 +303,7 @@ namespace OpenAI
             }
             else
             {
-                newMessage.Content = " Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro.";
+                newMessage.Content = " Responde a lo que dijo charly y dile que no le entiendes una verga, luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro. Charly dijo: " + msg;
             }
  
          
