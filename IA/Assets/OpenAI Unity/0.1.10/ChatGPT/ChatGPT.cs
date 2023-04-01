@@ -13,8 +13,10 @@ namespace OpenAI
         public int countAnswer = 0;
         public float timeSpeakingCarmen=10;
         public float timeSpeakingCharly=0;
+        public TextMeshProUGUI textCharly;
         public Image imageBar;
         public TextMeshProUGUI textChatUI;
+        public GameObject textChatUICharly;
         public float speedBar;
         bool barShowBool;
 
@@ -107,11 +109,15 @@ namespace OpenAI
             }
             if (countAnswer == 1)
             {
+                textCharly.text = "";
+                textChatUICharly.SetActive(false);
                 timeSpeakingCarmen -= Time.deltaTime;
                 if(timeSpeakingCarmen<=0) countAnswer = 2;
             }
             if (countAnswer == 2)
             {
+                textCharly.text = answerForCharly;
+                textChatUICharly.SetActive(true);
                 timeSpeakingCharly -= Time.deltaTime;
                 if (timeSpeakingCharly <= -1) countAnswer = 0;
             }
@@ -193,7 +199,7 @@ namespace OpenAI
             anim.SetBool("Start", true);
             animMen.SetBool("Start", false);
 
-            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"),pitch: 1.3f);
+            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"),pitch: 1.4f);
             if (noticias.Contains(message))
             {
                 barShowBool = false;
@@ -219,7 +225,7 @@ namespace OpenAI
             starMouthMen = true;
             animMen.SetBool("Start", true);
 
-            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture: "es"), pitch: 1.3f);
+            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture: "es"), pitch: 1.5f);
             timeSpeakingCharly = spk.ApproximateSpeechLength(message);
 
         }
@@ -235,7 +241,7 @@ namespace OpenAI
             newmsg.Content = "Eres charly ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar hacerca de la noticia que acaba de dar carmen";
             messages.Add(newmsg);
 
-            newMessage.Content = " Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
+            newMessage.Content = " En maximo 4 renglones. Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
 
 
             Debug.Log("Solicitud: " + newMessage.Content);
