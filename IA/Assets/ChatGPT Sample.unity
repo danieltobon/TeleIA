@@ -1395,6 +1395,7 @@ GameObject:
   - component: {fileID: 212795749}
   - component: {fileID: 212795748}
   - component: {fileID: 212795751}
+  - component: {fileID: 212795752}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1528,6 +1529,18 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &212795752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212795747}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a259095f93ba1e84db2412daeb1a6208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &221023486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4302838756563234, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
@@ -1857,13 +1870,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300014, guid: 56d84991286850f428b4e7df0cca7380, type: 3}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &281027602
@@ -3005,7 +3018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -660.9745, y: 99}
+  m_AnchoredPosition: {x: -610, y: 99}
   m_SizeDelta: {x: 492.2502, y: 128.9296}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &489117368
@@ -3029,7 +3042,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300014, guid: 56d84991286850f428b4e7df0cca7380, type: 3}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -3080,13 +3093,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageBar: {fileID: 281027601}
   textChatUI: {fileID: 1956368132}
-  speedBar: 150
+  speedBar: 100
   anim: {fileID: 1222589276}
   animUI: {fileID: 0}
   speedFillImage: 2
   skin: {fileID: 1883630679}
   noticias: []
-  aud: {fileID: 0}
+  aud: {fileID: 1760683324}
   VoiceName: Microsoft Server Speech Text to Speech Voice (ca-ES, Herena)
   promps:
   - En 4 renglones Narrame una noticia chistosa, que opinas de eso de forma chistosa
@@ -7195,6 +7208,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Listener Example
       objectReference: {fileID: 0}
+    - target: {fileID: 6194579495944778060, guid: b29825fca9888ed4a8a63f390aaa5adf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6194579495944778061, guid: b29825fca9888ed4a8a63f390aaa5adf, type: 3}
       propertyPath: maxBoxes
       value: 14
@@ -9609,6 +9626,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Twitch IRC
       objectReference: {fileID: 0}
+    - target: {fileID: 2556682976714024532, guid: 4d9054fc31b35014296f6c702d1771f6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2556682976714024533, guid: 4d9054fc31b35014296f6c702d1771f6, type: 3}
       propertyPath: oauth
       value: oauth:m8mk0p11tyaqgqmgxuaz2xcs8l6wqu
@@ -11364,9 +11385,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 100
+  MaxDistance: 8.6
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
