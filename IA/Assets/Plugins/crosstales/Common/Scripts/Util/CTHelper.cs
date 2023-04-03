@@ -23,7 +23,7 @@ namespace Crosstales.Common.Util
          {
             GameObject go = new GameObject("_CTHelper");
             go.AddComponent<CTHelper>();
-            DontDestroyOnLoad(go);
+           // DontDestroyOnLoad(go);
          }
       }
 

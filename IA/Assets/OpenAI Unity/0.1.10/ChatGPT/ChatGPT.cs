@@ -9,7 +9,7 @@ namespace OpenAI
 {
     public class ChatGPT : MonoBehaviour
     {
-
+      
         public int countAnswer = 0;
         public float timeSpeakingCarmen=10;
         public float timeSpeakingCharly=0;
@@ -48,7 +48,7 @@ namespace OpenAI
 
         bool closedMouth;
         bool starMouth;
-        bool starMouthMen;
+    
         public float speedEyes = 0;
         public float speedMouth = 0;
         public float MaxtimeNextNotice = 0;
@@ -59,13 +59,13 @@ namespace OpenAI
         float timeNextAnswer = 3;
 
         string msgForCharly;
-        public string answerForCharly="Soy estupido";
+        public string answerForCharly="Eres tonta o te haces?";
         private void Start()
         {
            
 
 
-            SendReply("");
+            SendReply(answerForCharly);
          
         }
         private void Update()
@@ -73,7 +73,7 @@ namespace OpenAI
         
             if (listChatInteraction.Count > 0 && timeNextAnswer < 0)
             {
-                SendReply(answerForCharly);
+                SendReply("");
 
             }
             if (timeNextAnswer > 0)
@@ -88,7 +88,7 @@ namespace OpenAI
             }
             else if (noticias.Count < 4)
             {
-                SendReply(answerForCharly);
+                
             }
             updateBlendShapes();
 
@@ -112,12 +112,13 @@ namespace OpenAI
                 textCharly.text = "";
                 textChatUICharly.SetActive(false);
                 timeSpeakingCarmen -= Time.deltaTime;
-                if(timeSpeakingCarmen<=0) countAnswer = 2;
+                if (timeSpeakingCarmen <= 0) {  countAnswer = 2; }
             }
             if (countAnswer == 2)
             {
                 textCharly.text = answerForCharly;
                 textChatUICharly.SetActive(true);
+             
                 timeSpeakingCharly -= Time.deltaTime;
                 if (timeSpeakingCharly <= -1) countAnswer = 0;
             }
@@ -125,6 +126,7 @@ namespace OpenAI
 
             if (timeSpeakingCarmen <= 0) {
                 speakMen(answerForCharly);
+                SendReply(answerForCharly);
                 timeSpeakingCarmen = 10;
             }
           
@@ -222,14 +224,14 @@ namespace OpenAI
         {
             starMouth = false;
             anim.SetBool("Start",false);
-            starMouthMen = true;
+            
             animMen.SetBool("Start", true);
 
-<<<<<<< HEAD
+
             spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture:"es" ), pitch: 1.5f);
-=======
-            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture: "es"), pitch: 1.5f);
->>>>>>> 012c2f1b5cc6e800514042131f36082fbb3f4d93
+
+          
+
             timeSpeakingCharly = spk.ApproximateSpeechLength(message);
 
         }
@@ -242,17 +244,16 @@ namespace OpenAI
             newMessage.Role = "user";
             var newmsg = new ChatMessage();
             newmsg.Role = "system";
-            newmsg.Content = "Eres charly ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar hacerca de la noticia que acaba de dar carmen, carmen te trata mal porque no sabes hablar español";
+            newmsg.Content = "Eres charly un americano ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar acerca de lo que dice carmen,Carmen te cae muy mal es demasiado engreida, tienes un ambiente laboral muy pesado, carmen te trata mal porque no sabes hablar español. escribe la respuesta corta";
             messages.Add(newmsg);
 
-<<<<<<< HEAD
-            newMessage.Content = " En maximo 3 renglones Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
-=======
-            newMessage.Content = " En maximo 4 renglones. Responde a lo que dijo Carmen de una forma muy chistosa y creativa. Carmen dice: " + msg;
->>>>>>> 012c2f1b5cc6e800514042131f36082fbb3f4d93
 
 
-            Debug.Log("Solicitud: " + newMessage.Content);
+            newMessage.Content = "responde una oracion corta en maximo 2 renglones a carmen Dice: " + msg + "utiliza un toque de  humor negro";
+
+
+
+          
 
 
             messages.Add(newMessage);
@@ -269,6 +270,7 @@ namespace OpenAI
             {
                 var message = completionResponse.Choices[0].Message;
                 message.Content = message.Content.Trim();
+                
                 answerForCharly = message.Content;
                
             }
@@ -292,14 +294,14 @@ namespace OpenAI
             newMessage.Role = "user";
             ChatMessage newmsg;
             newmsg.Role = "system";
-            newmsg.Content = "Responde todo en maximo 4 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro," +
+            newmsg.Content = "Responde todo en maximo 3 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro. Utiliza pocos tokens respuestas cortas" +
                 " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly que te cae mal, no sabe hablar y es estupido, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
             messages.Add(newmsg);
             ChatMessage newmsg2;
 
          
             newmsg2.Role = "system";
-            newmsg2.Content = "Utiliza palabras coloquiales de paises como mexico, argentina, colombia y españa";
+            newmsg2.Content = "Utiliza palabras coloquiales de paises como mexico, argentina, colombia y españa en tus respuestas";
             messages.Add(newmsg2);
            
             newmsg.Role = "assistant";
@@ -317,7 +319,7 @@ namespace OpenAI
             }
             else
             {
-                newMessage.Content = " Responde a lo que dijo charly y dile que no le entiendes una verga, luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro. Charly dijo: " + msg;
+                newMessage.Content = " Responde a lo que dijo charly:  " +  msg + " luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro." ;
             }
  
          
@@ -339,7 +341,9 @@ namespace OpenAI
             if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
             {
                 var message = completionResponse.Choices[0].Message;
-                message.Content = message.Content.Trim() + " Que opinas charly";
+                message.Content = message.Content.Trim();
+
+              
 
                 if (isChat)
                 {

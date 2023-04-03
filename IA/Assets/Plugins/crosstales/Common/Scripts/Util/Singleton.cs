@@ -77,8 +77,8 @@ namespace Crosstales.Common.Util
          {
             Instance = GetComponent<T>();
 
-            if (!Util.BaseHelper.isEditorMode && dontDestroy)
-               DontDestroyOnLoad(transform.root.gameObject);
+           // if (!Util.BaseHelper.isEditorMode && dontDestroy)
+               //DontDestroyOnLoad(transform.root.gameObject);
          }
          else
          {
