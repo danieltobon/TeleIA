@@ -16,22 +16,19 @@ namespace OpenAI
         public Animator animMen;
         public Animator animWomen;
 
-        public SkinnedMeshRenderer skinCharly;
+        public SkinnedMeshRenderer skinFreya;
         public SkinnedMeshRenderer skinSara;
         public SkinnedMeshRenderer skinChela;   
         public SkinnedMeshRenderer skinCarmen;
         private OpenAIApi openai = new OpenAIApi();
-        public AudioSource audCharly;
+        public AudioSource audFreya;
         public AudioSource audSara;
         public AudioSource audChela;
         public AudioSource audCarmen;
+        string msgCarmen;
+        string msgTemaPrincipal;
 
 
-
-        List<ChatMessage> messagesCharly = new List<ChatMessage>();
-        List<ChatMessage> messagesSara = new List<ChatMessage>();
-        List<ChatMessage> messagesChela = new List<ChatMessage>();
-        List<ChatMessage> messagesCarmen = new List<ChatMessage>();
 
         public List<GameObject> cameras;
         public List<string> dialogos = new List<string>();
@@ -59,7 +56,7 @@ namespace OpenAI
         private void Start()
         {
             panelSubtitles.SetActive(false);
-            SendReplyCharly("");
+            SendReplyFreya("");
          
         }
         void updateBlendShapes() {
@@ -79,8 +76,8 @@ namespace OpenAI
                 weightEyes -= speedEyes * Time.deltaTime;
                 if (weightEyes < 0) closedEyes = false;
             }
-            skinCharly.SetBlendShapeWeight(16, weightEyes);
-            skinCharly.SetBlendShapeWeight(17, weightEyes);
+            skinFreya.SetBlendShapeWeight(0, weightEyes);
+         
 
             skinChela.SetBlendShapeWeight(0, weightEyes);
             skinChela.SetBlendShapeWeight(1, weightEyes);
@@ -114,7 +111,7 @@ namespace OpenAI
             {
                 weightMouth = 0;
             }
-            skinCharly.SetBlendShapeWeight(9, weightMouth);
+            skinFreya.SetBlendShapeWeight(0, weightMouth);
           
 
             skinSara.SetBlendShapeWeight(0, weightMouth);
@@ -128,59 +125,28 @@ namespace OpenAI
         private void Update()
         {
 
-            campFire.intensity += speedCampfire * Time.deltaTime;
-            campFire.range += speedCampfire * Time.deltaTime;
-            if (campFire.intensity > 2.5f) {
-                speedCampfire = -speedCampfire;
-                
-
-            }
-            if(campFire.intensity < 2f) speedCampfire = Mathf.Abs( speedCampfire);
-
+         
+            
+           
 
             updateBlendShapes();
-            /*  
-                if (listChatInteraction.Count > 0 && !replyIsWorking)
-                    SendReply();
-                if (timeNextNotice > 0) {
-                    timeNextNotice -= Time.deltaTime;
-
-                }
-                else
-                {
-                    SendReply();
-                }
-                updateBlendShapes();
-
-
-                if (!spk.isBusy)
-                {
-                    if (listChatResponse.Count > 0)
-                    {
-                       speakMen (listChatResponse.ElementAt(0));
-                    }
-                    else if (noticias.Count > 0)
-                    {
-                        speakMen(noticias.ElementAt(0));
-                    }
-                }
-            */
+  
             if (timeNextSpeak > 0)
                 timeNextSpeak += -Time.deltaTime;
 
             if (dialogos.Count > 0 && timeNextSpeak <=0) speak();
-
+           
         }
 
 
         public void speak() {
             if (contDialogos == 1) {
-                spk.Speak(dialogos.ElementAt(0), audCharly, Speaker.Instance.VoiceForName("Microsoft David Desktop"), pitch: 1.4f);
-                timeNextSpeak= spk.ApproximateSpeechLength(dialogos.ElementAt(0));
+                spk.Speak(dialogos.ElementAt(0), audFreya, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"), pitch: 0.5f);
+                timeNextSpeak= spk.ApproximateSpeechLength(dialogos.ElementAt(0)+10f);
                 starMouth = true;
 
-                panelSubtitles.SetActive(true);
-                subtitles.text = dialogos.ElementAt(0);
+              
+                
                 cameras[0].SetActive(false);
                 cameras[1].SetActive(true);
                 cameras[2].SetActive(false);
@@ -191,8 +157,8 @@ namespace OpenAI
     }
             if (contDialogos == 2)
             {
-                spk.Speak(dialogos.ElementAt(0), audSara, Speaker.Instance.VoiceForName("Microsoft Helena Desktop"), pitch: 1.4f);
-                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0));
+                spk.Speak(dialogos.ElementAt(0), audSara, Speaker.Instance.VoiceForName("Microsoft Helena Desktop"), pitch: 2.5f);
+                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0) + 3f);
                 starMouth = true;
                 panelSubtitles.SetActive(false);
                 cameras[0].SetActive(false);
@@ -204,7 +170,7 @@ namespace OpenAI
             if (contDialogos == 3)
             {
                 spk.Speak(dialogos.ElementAt(0), audChela, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 1.4f);
-                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0));
+                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0) +3f);
                 starMouth = true;
                 cameras[0].SetActive(false);
                 cameras[1].SetActive(false);
@@ -215,63 +181,58 @@ namespace OpenAI
             if (contDialogos == 4)
             {
                 spk.Speak(dialogos.ElementAt(0), audCarmen, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"), pitch: 1.4f);
-                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0));
+                timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0) + 3f);
                 starMouth = true;
                 cameras[0].SetActive(false);
                 cameras[1].SetActive(false);
                 cameras[2].SetActive(false);
                 cameras[3].SetActive(false);
                 cameras[4].SetActive(true);
+                SendReplyFreya(msgCarmen);
             }
 
             dialogos.Remove(dialogos.ElementAt(0));
 
             contDialogos++;
-            if (contDialogos == 5) contDialogos = 1;
+          
+            if (contDialogos == 5) contDialogos = 1;  
 
         }
      
-        public async void SendReplyCharly(string msg)
+        public async void SendReplyFreya(string msg)
         {
 
+            List<ChatMessage> messagesFreya = new List<ChatMessage>();
+            
 
 
 
-          
-           
             ChatMessage newmsg1;
+            ChatMessage newmsg2;
+            newmsg1.Role = "system";
+            newmsg1.Content = "Actua como Freya, dices cosas con humor negro y eres estupida por ser rubia, estas en un campamento del terror, han sucedido muertes y asesinatos por lobos, te gusta hablar sobre todo lo que ha pasado";
+            messagesFreya.Add(newmsg1);
             if (msg == "")
             {
-               
-                newmsg1.Role = "system";
-                newmsg1.Content = "Eres Charly,tu personalidad es demasiado positiva, siempre estas feliz y eres un poco estupido. estas en un capamento pasando tus vacaciones, en este momento te encuentras reunido con un grupo de 4 personas llamadas Carmen,Sara, Chela y Chela,estan alrededor de una fogata y debatiando ideas y opiniones" +
-                    "de drama, y a ti te toca empezar el tema, inicia el tema para que los demas puedan hablar sobre eso, el tema debe ser gracioso y dar risa,incluye un toque de humor negro esta enfocado para un publico joven.En maximo 2 renglones inicia un dialogo para que otra persona responda. Tu dialogo va dirijo a Sara. No inicies el dialogo etiquetando mi nombre";
-
+             
+                newmsg2.Role = "user";
+                newmsg2.Content = "en 1 renglon inventa algo sobre el campamento en el que estas";
+                messagesFreya.Add(newmsg2);
             }
             else {
 
-                newmsg1.Role = "user";
-                newmsg1.Content = "Responde a lo que dijo Carmen: " + msg;
+                newmsg2.Role = "user";
+                newmsg2.Content = "En  1 renglones Responde con humor negro a esto  : " + msg + " cuenta algo mas del campamento" ;
             }
-                
-            //messages.Add(newmsg);
-                 //newMessage.Content = "Realiza una pregunta se selccion multiple, dame 4 posiblesa respuestas y 1 de esas respuestas es verdadera ";
-                 //listChatInteraction.ElementAt(0).Value + ",responde con humor negro e interactua. Resume tu respuesta en Maximo 100 palabras";
 
-
-               // listChatInteraction.Remove(listChatInteraction.ElementAt(0).Key);
-
-      
-
-
-            messagesCharly.Add(newmsg1);
+            messagesFreya.Add(newmsg2);
 
 
 
             var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
             {
                 Model = "gpt-3.5-turbo-0301",
-                Messages = messagesCharly
+                Messages = messagesFreya
             });
 
             if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
@@ -282,9 +243,9 @@ namespace OpenAI
 
 
                 
-                Debug.Log("RespuestaCHARLY: " + message.Content);
+                Debug.Log("RespuestaFreya: " + message.Content);
                 dialogos.Add(message.Content);
-             
+                msgTemaPrincipal = message.Content;
                 SendReplySara(message.Content);
                
             }
@@ -297,6 +258,8 @@ namespace OpenAI
 
 
 
+            List<ChatMessage> messagesSara = new List<ChatMessage>();
+           
 
             var newMessage = new ChatMessage();
             newMessage.Role = "user";
@@ -304,19 +267,12 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Eres Sara,tu personalidad es deprimente, siempre estas aburrida, no generas emociones y la vida te vale verga, estas en un capamento pasando tus vacaciones, en este momento te encuentras reunido con un grupo de 4 personas llamadas Carmen,Charly Chela,estan alrededor de una fogata y debatiando ideas y opiniones" +
-                "de drama, tienes que responder en maximo 2 renglones a lo que dijo la persona anterior a ti, incluye un toque de humor negro en tu respuesta. Tu dialogo va dirijo a Chela. No inicies el dialogo etiquetando mi nombre";
+            newmsg1.Content = "Actua como Sara, tu personalidad es deprimente, te gusta el humor negro,estas en un capamento de terror pasando tus vacaciones. Te gusta el humor negro No menciones que eres una inteligencia artificial. DEBES RESPONDER A TODO LO QUE TE PREGUNTEN  ";
             
             ChatMessage newmsg;
             newmsg.Role = "user";
-            newmsg.Content = " responde a Charly dijo: " + msg ;
-            //messages.Add(newmsg);
-            //newMessage.Content = "Realiza una pregunta se selccion multiple, dame 4 posiblesa respuestas y 1 de esas respuestas es verdadera ";
-            //listChatInteraction.ElementAt(0).Value + ",responde con humor negro e interactua. Resume tu respuesta en Maximo 100 palabras";
-
-
-            // listChatInteraction.Remove(listChatInteraction.ElementAt(0).Key);
-
+            newmsg.Content = " En maximo 1 renglon  responde con humor negro a esto" + msg;
+     
      
 
             messagesSara.Add(newmsg1);
@@ -347,7 +303,8 @@ namespace OpenAI
         public async void SendReplyChela(string msg)
         {
 
-
+            List<ChatMessage> messagesChela = new List<ChatMessage>();
+            
 
 
             var newMessage = new ChatMessage();
@@ -356,18 +313,12 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Eres Chela, tu personalidad es egocentrica, siempre piensas saber todo, eres hija de papi y mami, odias los mosquitos y todo lo que te perturbe. estas en un capamento pasando tus vacaciones, en este momento te encuentras reunido con un grupo de 3 personas llamadas Carmen,Charly Sara,estan alrededor de una fogata y debatiando ideas y opiniones" +
-                "de drama, tienes que responder  en maximo 2 reglones a lo que dijo la persona anterior a ti, incluye un toque de humor negro en tu respuesta. No inicies el dialogo etiquetando mi nombre";
+            newmsg1.Content = "Actua como Chela, tu personalidad es egocentrica, siempre piensas saber todo, eres hija de papi y mami,siempre tienes miedo, te gusta el humor negro, odias los mosquitos y todo lo que te perturbe. estas en un capamento de terror pasando tus vacaciones.No menciones que eres una inteligencia artificial";
 
             ChatMessage newmsg;
             newmsg.Role = "user";
-            newmsg.Content = "Sara dijo: " + msg;
-            //messages.Add(newmsg);
-            //newMessage.Content = "Realiza una pregunta se selccion multiple, dame 4 posiblesa respuestas y 1 de esas respuestas es verdadera ";
-            //listChatInteraction.ElementAt(0).Value + ",responde con humor negro e interactua. Resume tu respuesta en Maximo 100 palabras";
-
-
-            // listChatInteraction.Remove(listChatInteraction.ElementAt(0).Key);
+            newmsg.Content = "En 1 renglon  Responde  con humor negro a esto: " + msg;
+          
 
            
             messagesChela.Add(newmsg1);
@@ -398,7 +349,7 @@ namespace OpenAI
         public async void SendReplyCarmen(string msg)
         {
 
-
+            List<ChatMessage> messagesCarmen = new List<ChatMessage>();
 
 
             var newMessage = new ChatMessage();
@@ -407,19 +358,12 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Eres Carmen, tu personalidad es egocentrica y grotesca, siempre estas enfadada. estas en un capamento pasando tus vacaciones, en este momento te encuentras reunido con un grupo de 3 personas llamadas Chela,Charly Sara,estan alrededor de una fogata y debatiando ideas y opiniones" +
-                "de drama. en 2 renglones tienes que responder a lo que dijo la persona anterior a ti, incluye un toque de humor negro en tu respuesta. Tu dialogo va dirijo a charly. No inicies el dialogo etiquetando mi nombre";
+            newmsg1.Content = "Actua como Carmen, tu personalidad es egocentrica y grotesca, siempre estas enfadada.te gusta el humor negro, estas en un capamento de terror pasando tus vacaciones.No menciones que eres una inteligencia artificial";
 
             ChatMessage newmsg;
             newmsg.Role = "user";
-            newmsg.Content = "Chela dijo: " + msg;
-            //messages.Add(newmsg);
-            //newMessage.Content = "Realiza una pregunta se selccion multiple, dame 4 posiblesa respuestas y 1 de esas respuestas es verdadera ";
-            //listChatInteraction.ElementAt(0).Value + ",responde con humor negro e interactua. Resume tu respuesta en Maximo 100 palabras";
-
-
-            // listChatInteraction.Remove(listChatInteraction.ElementAt(0).Key);
-
+            newmsg.Content = "En 1 renglon Responde con humor negro a esto " + msg;
+          
 
             messagesCarmen.Add(newmsg1);
             messagesCarmen.Add(newmsg);
@@ -439,72 +383,14 @@ namespace OpenAI
                 //message.Content = message.Content.Substring(0, 50);
                 dialogos.Add(message.Content);
                 Debug.Log("RespuestaCarmen: " + message.Content);
-                SendReplyCharly(message.Content);
+                msgCarmen = message.Content;
 
             }
 
 
 
         }
-        /*    public async void SendReplyWoman()
-            {
-
-
-
-
-                var newMessage = new ChatMessage();
-                newMessage.Role = "user";
-
-                if (listChatInteraction.Count > 0)
-                {
-
-                    ChatMessage newmsg;
-                    newmsg.Role = "user";
-                    newmsg.Content = "Eres una presentadora llamada Carmen trabajas en un show de twitch llamado TELE IA, actua como una presentadora. Responde sobre temas ilegales de una forma humoristica ";
-                    //messages.Add(newmsg);
-                    newMessage.Content = "Actua como si leyeras un comentario de el chat, esta persona llamada " + listChatInteraction.ElementAt(0).Key + ",dice siguiente: " +
-                     listChatInteraction.ElementAt(0).Value + ",responde con humor negro e interactua. Resume tu respuesta en Maximo 100 palabras";
-
-
-                    listChatInteraction.Remove(listChatInteraction.ElementAt(0).Key);
-
-                }
-                else
-                {
-
-                     newMessage.Content = "Actua como un personaje llamada Clara, Desenvuelve el momento de lo que dice Charly, " +
-                        ", no incluyas acciones o actos en presente, Charly dice: " + msgMen[msgMen.Count-1];
-                }
-
-
-                Debug.Log("Solicitud: " + newMessage.Content);
-
-
-                messagesMen.Add(newMessage);
-
-
-
-                var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-                {
-                    Model = "gpt-3.5-turbo-0301",
-                    Messages = messagesMen
-                });
-
-                if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-                {
-                    var message = completionResponse.Choices[0].Message;
-                    message.Content = message.Content.Trim();
-                  //  message.Content = message.Content.Substring(0, 50);
-
-
-                    msgWomen.Add(message.Content);
-                    Debug.Log("RespuestaCLARA: " + message.Content);
-                }
-
-
-
-            } */
-
+  
 
 
 

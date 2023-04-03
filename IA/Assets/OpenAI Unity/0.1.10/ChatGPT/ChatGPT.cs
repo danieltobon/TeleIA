@@ -12,19 +12,22 @@ namespace OpenAI
       
         public int countAnswer = 0;
         public float timeSpeakingCarmen=10;
-        public float timeSpeakingCharly=0;
-        public TextMeshProUGUI textCharly;
+        public float timeSpeakingChela=0;
+        
         public Image imageBar;
-        public TextMeshProUGUI textChatUI;
-        public GameObject textChatUICharly;
+     
         public float speedBar;
         bool barShowBool;
+        public TextMeshProUGUI textInteraction;
 
-        public Animator anim;
-        public Animator animMen;
-        public Animator animUI;
+        bool SpeakingChela;
+        bool SpeakingCarmen;
+
+        public Animator animChela;
+        public Animator animCarmen;
         public float speedFillImage;
         public SkinnedMeshRenderer skin;
+        public SkinnedMeshRenderer skinChela;
         public List<string> noticias= new List<string>();
         public Dictionary<string, string> listChatResponse = new Dictionary<string, string>();
         public AudioSource aud;
@@ -48,6 +51,8 @@ namespace OpenAI
 
         bool closedMouth;
         bool starMouth;
+
+
     
         public float speedEyes = 0;
         public float speedMouth = 0;
@@ -58,14 +63,14 @@ namespace OpenAI
         float timeToAnswer = 7;
         float timeNextAnswer = 3;
 
-        string msgForCharly;
-        public string answerForCharly="Eres tonta o te haces?";
+        string msgForChela;
+        public string answerForChela="";
         private void Start()
         {
            
 
 
-            SendReply(answerForCharly);
+            SendReply(answerForChela);
          
         }
         private void Update()
@@ -98,41 +103,47 @@ namespace OpenAI
                 if (listChatResponse.Count > 0)
                 {
 
-                    speak(listChatResponse.ElementAt(0).Value);
+                    speakCarmen(listChatResponse.ElementAt(0).Value);
 
                 }
                 else if (noticias.Count > 0)
                 {
 
-                    speak(noticias.ElementAt(0));
+                    speakCarmen(noticias.ElementAt(0));
                 }
             }
             if (countAnswer == 1)
             {
-                textCharly.text = "";
-                textChatUICharly.SetActive(false);
+                
+               
                 timeSpeakingCarmen -= Time.deltaTime;
                 if (timeSpeakingCarmen <= 0) {  countAnswer = 2; }
             }
             if (countAnswer == 2)
             {
-                textCharly.text = answerForCharly;
-                textChatUICharly.SetActive(true);
+               
+            
              
-                timeSpeakingCharly -= Time.deltaTime;
-                if (timeSpeakingCharly <= -1) countAnswer = 0;
+                timeSpeakingChela -= Time.deltaTime;
+                if (timeSpeakingChela <= -1) countAnswer = 0;
             }
 
 
             if (timeSpeakingCarmen <= 0) {
-                speakMen(answerForCharly);
-                SendReply(answerForCharly);
+                speakChela(answerForChela);
+                SendReply(answerForChela);
                 timeSpeakingCarmen = 10;
             }
-          
 
+            if (barShowBool)
+            {
+
+                imageBar.fillAmount += Time.deltaTime * speedBar;
+            }
+            else imageBar.fillAmount += -Time.deltaTime * speedBar;
         }
         void updateBlendShapes() {
+          
             if (weightEyes<100 && closedEyes==false ) {
                 timeEyes += Time.deltaTime;
                 if (timeEyes > 3)
@@ -151,7 +162,10 @@ namespace OpenAI
                 weightEyes -= speedEyes * Time.deltaTime;
                 if (weightEyes < 0) closedEyes = false;
             }
-            skin.SetBlendShapeWeight(1, weightEyes);
+           
+                skin.SetBlendShapeWeight(1, weightEyes);
+            skinChela.SetBlendShapeWeight(0, weightEyes);
+            skinChela.SetBlendShapeWeight(1, weightEyes);
 
             if (starMouth) {
                 if (weightMouth < 100 && closedMouth == false)
@@ -178,41 +192,45 @@ namespace OpenAI
             {
                 weightMouth = 0;
             }
-            skin.SetBlendShapeWeight(3, weightMouth);
-
-
-            if (barShowBool) {
-
-                imageBar.fillAmount += Time.deltaTime * speedBar;
+            if(SpeakingCarmen)
+                skin.SetBlendShapeWeight(3, weightMouth);
+            else
+            {
+                skin.SetBlendShapeWeight(3, 0);
             }
-            else imageBar.fillAmount += -Time.deltaTime * speedBar;
+            if (SpeakingChela)
+                skinChela.SetBlendShapeWeight(4, weightMouth);
+            else
+            {
+                skinChela.SetBlendShapeWeight(4, 0);
+            }
 
-            if (timeToAnswer > 0) timeToAnswer += -Time.deltaTime;
+          
         }
        
-        public void barShow(string text) {
-            textChatUI.text = text;
-            barShowBool = true;
-        }
-        public void speak(string message)
+ 
+        public void speakCarmen(string message)
         {
            
             starMouth = true;
-            anim.SetBool("Start", true);
-            animMen.SetBool("Start", false);
+            SpeakingCarmen = true;
+            SpeakingChela = false;
+            animCarmen.SetBool("Start", true);
+            animChela.SetBool("Start", false);
 
             spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"),pitch: 1.4f);
             if (noticias.Contains(message))
             {
                 barShowBool = false;
-                textChatUI.text = "";
+               
                 noticias.Remove(message);
                 
             }
             if (listChatResponse.ContainsValue(message)) {
 
-                barShow(listChatResponse.ElementAt(0).Key);
-                var item = listChatResponse.FirstOrDefault(kvp => kvp.Value == message);
+                textInteraction.text = listChatResponse.ElementAt(0).Key;
+                barShowBool = true;
+                 var item = listChatResponse.FirstOrDefault(kvp => kvp.Value == message);
                 listChatResponse.Remove(item.Key);
                }
             countAnswer = 1;
@@ -220,19 +238,20 @@ namespace OpenAI
             SendReplyMen(message);
         }
         
-        public void speakMen(string message)
+        public void speakChela(string message)
         {
-            starMouth = false;
-            anim.SetBool("Start",false);
-            
-            animMen.SetBool("Start", true);
+            starMouth = true;
+            SpeakingCarmen = false;
+            SpeakingChela = true;
+            animCarmen.SetBool("Start", false);
+            animChela.SetBool("Start", true);
 
 
-            spk.Speak(message, audMen, Speaker.Instance.VoiceForGender(Crosstales.RTVoice.Model.Enum.Gender.MALE, fallbackCulture:"es" ), pitch: 1.5f);
+            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 1.4f);
 
-          
 
-            timeSpeakingCharly = spk.ApproximateSpeechLength(message);
+
+            timeSpeakingChela = spk.ApproximateSpeechLength(message);
 
         }
         public async void SendReplyMen(string msg)
@@ -244,7 +263,7 @@ namespace OpenAI
             newMessage.Role = "user";
             var newmsg = new ChatMessage();
             newmsg.Role = "system";
-            newmsg.Content = "Eres charly un americano ayudante de la presentadora de noticias llamada Carmen, tu trabajo es simple, responde o opinar acerca de lo que dice carmen,Carmen te cae muy mal es demasiado engreida, tienes un ambiente laboral muy pesado, carmen te trata mal porque no sabes hablar español. escribe la respuesta corta";
+            newmsg.Content = "Actua como una presentadora, eres Chela una chica ayudante de la presentadora de noticias llamada Carmen,eres muy hermosa y rubia, tu trabajo es simple, responde o opinar acerca de lo que dice carmen,Carmen te cae muy mal es demasiado engreida, tienes un ambiente laboral muy pesado, carmen te tiene envidia. escribe la respuesta corta";
             messages.Add(newmsg);
 
 
@@ -271,7 +290,7 @@ namespace OpenAI
                 var message = completionResponse.Choices[0].Message;
                 message.Content = message.Content.Trim();
                 
-                answerForCharly = message.Content;
+                answerForChela = message.Content;
                
             }
 
@@ -281,8 +300,8 @@ namespace OpenAI
         }
         public async void SendReply(string msg)
         {
-
-
+            int randomNotice = Random.Range(0,2);
+            Debug.Log(randomNotice);
             List<ChatMessage> messages = new List<ChatMessage>();
             replyIsWorking = true;
             bool isChat = false;
@@ -295,7 +314,7 @@ namespace OpenAI
             ChatMessage newmsg;
             newmsg.Role = "system";
             newmsg.Content = "Responde todo en maximo 3 renglones, genera opiniones chistosas sobre cada noticia, escribe con un toque de humor negro. Utiliza pocos tokens respuestas cortas" +
-                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañero llamado charly que te cae mal, no sabe hablar y es estupido, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
+                " Eres una presentadora llamada Carmen trabajas en un show humoristico de twitch llamado TELE IA tienes un compañera llamada Chela que te cae mal,le tienes envidia, actua como una presentadora. No digas que eres una inteligencia artificial.no saludes al inicio";
             messages.Add(newmsg);
             ChatMessage newmsg2;
 
@@ -319,7 +338,10 @@ namespace OpenAI
             }
             else
             {
-                newMessage.Content = " Responde a lo que dijo charly:  " +  msg + " luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro." ;
+                if(randomNotice ==1)
+                newMessage.Content = " Responde a lo que dijo Chela:  " +  msg + " luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro." ;
+                if (randomNotice == 0)
+                    newMessage.Content = "Responde a lo que dijo Chela:  " + msg ;
             }
  
          
@@ -343,7 +365,8 @@ namespace OpenAI
                 var message = completionResponse.Choices[0].Message;
                 message.Content = message.Content.Trim();
 
-              
+                if (message.Content[0] == 'C' && message.Content[0] == 'a' && message.Content[0] == 'r')
+                    message.Content.Remove(0,6);
 
                 if (isChat)
                 {
