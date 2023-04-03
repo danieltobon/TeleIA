@@ -247,7 +247,7 @@ namespace OpenAI
             animChela.SetBool("Start", true);
 
 
-            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 1.4f);
+            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 2f);
 
 
 
@@ -300,7 +300,7 @@ namespace OpenAI
         }
         public async void SendReply(string msg)
         {
-            int randomNotice = Random.Range(0,2);
+            int randomNotice = Random.Range(0,4);
             Debug.Log(randomNotice);
             List<ChatMessage> messages = new List<ChatMessage>();
             replyIsWorking = true;
@@ -340,7 +340,7 @@ namespace OpenAI
             {
                 if(randomNotice ==1)
                 newMessage.Content = " Responde a lo que dijo Chela:  " +  msg + " luego Narra 1 noticia creativa chistosa responde de forma chistosa con un toque de humor negro." ;
-                if (randomNotice == 0)
+               else
                     newMessage.Content = "Responde a lo que dijo Chela:  " + msg ;
             }
  
