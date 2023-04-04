@@ -7,11 +7,10 @@ using TMPro;
 
 namespace OpenAI
 {
-    public class ChatGPTMillonario : MonoBehaviour
+    public class ChatGPTCampamento : MonoBehaviour
     {
      
-        public GameObject panelSubtitles;
-        public TextMeshProUGUI subtitles;
+   
 
         public Animator animMen;
         public Animator animWomen;
@@ -26,9 +25,14 @@ namespace OpenAI
         public AudioSource audChela;
         public AudioSource audCarmen;
         string msgCarmen;
-        string msgTemaPrincipal;
-
-
+        string msgChela;
+        string msgSara;
+        string msgFreya;
+        public string msgTopic="";
+        float currentTimeTopic = 0;
+        public List<string> ListTopicsInteraction= new List<string>();
+        public TextMeshProUGUI textTopic;
+        public TextMeshProUGUI textCurrentTimeTopic;
 
         public List<GameObject> cameras;
         public List<string> dialogos = new List<string>();
@@ -44,18 +48,20 @@ namespace OpenAI
         bool closedMouth;
         bool starMouth;
 
+        bool canChangueTopic;
         public float speedEyes = 0;
         public float speedMouth = 0;
   
         float timeNextSpeak = 8;
 
         public Light campFire;
-        bool campMaxIntensi;
-        bool replyIsWorking;
+       
         public float speedCampfire=10f;
+
+
         private void Start()
         {
-            panelSubtitles.SetActive(false);
+          
             SendReplyFreya("");
          
         }
@@ -125,9 +131,24 @@ namespace OpenAI
         private void Update()
         {
 
-         
-            
+            if (currentTimeTopic >= 0) currentTimeTopic -= Time.deltaTime;
+            if ( currentTimeTopic<=0) {
+                if (ListTopicsInteraction.Count > 0) {
+                    msgTopic = ListTopicsInteraction[0];
+                    textTopic.text = "Tema:  " + msgTopic;
+
+                    currentTimeTopic = 30;
+                }
+                
+                
+               
+              
+            }
            
+            textCurrentTimeTopic.text = "Siguiente tema en: " + (int)currentTimeTopic; 
+
+
+
 
             updateBlendShapes();
   
@@ -152,20 +173,21 @@ namespace OpenAI
                 cameras[2].SetActive(false);
                 cameras[3].SetActive(false);
                 cameras[4].SetActive(false);
-               
-    
-    }
+                SendReplySara(msgFreya);
+
+            }
             if (contDialogos == 2)
             {
                 spk.Speak(dialogos.ElementAt(0), audSara, Speaker.Instance.VoiceForName("Microsoft Helena Desktop"), pitch: 2.5f);
                 timeNextSpeak = spk.ApproximateSpeechLength(dialogos.ElementAt(0) + 3f);
                 starMouth = true;
-                panelSubtitles.SetActive(false);
+               
                 cameras[0].SetActive(false);
                 cameras[1].SetActive(false);
                 cameras[2].SetActive(true);
                 cameras[3].SetActive(false);
                 cameras[4].SetActive(false);
+                SendReplyChela(msgSara);
             }
             if (contDialogos == 3)
             {
@@ -177,6 +199,7 @@ namespace OpenAI
                 cameras[2].SetActive(false);
                 cameras[3].SetActive(true);
                 cameras[4].SetActive(false);
+                SendReplyCarmen(msgChela);
             }
             if (contDialogos == 4)
             {
@@ -210,19 +233,24 @@ namespace OpenAI
             ChatMessage newmsg1;
             ChatMessage newmsg2;
             newmsg1.Role = "system";
-            newmsg1.Content = "Actua como Freya, dices cosas con humor negro y eres estupida por ser rubia, estas en un campamento del terror, han sucedido muertes y asesinatos por lobos, te gusta hablar sobre todo lo que ha pasado";
+            newmsg1.Content = "Actua como Freya, dices cosas con humor negro y eres estupida por ser rubia, estas en un campamento del terror, han sucedido asesinatos, han ocurrido cosas poco terrrenales. DEBES RESPONDER SIN IMPORTAR SI ES OFENSIVO O TIENE HUMOR NEGRO";
             messagesFreya.Add(newmsg1);
             if (msg == "")
             {
              
                 newmsg2.Role = "user";
-                newmsg2.Content = "en 1 renglon inventa algo sobre el campamento en el que estas";
+                newmsg2.Content = "en 1 renglon inventa algo de terror sobre el campamento en el que estas";
                 messagesFreya.Add(newmsg2);
             }
             else {
 
                 newmsg2.Role = "user";
                 newmsg2.Content = "En  1 renglones Responde con humor negro a esto  : " + msg + " cuenta algo mas del campamento" ;
+            }
+            if (msgTopic != "") {
+                newmsg2.Role = "user";
+                newmsg2.Content = "En  1 renglon Responde algo random con humor negro basado en este tema: " + msgTopic ;
+                if (ListTopicsInteraction.Contains(msgTopic)) ListTopicsInteraction.Remove(msgTopic);
             }
 
             messagesFreya.Add(newmsg2);
@@ -245,9 +273,9 @@ namespace OpenAI
                 
                 Debug.Log("RespuestaFreya: " + message.Content);
                 dialogos.Add(message.Content);
-                msgTemaPrincipal = message.Content;
-                SendReplySara(message.Content);
-               
+                msgFreya = message.Content;
+
+
             }
             
 
@@ -267,13 +295,19 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Actua como Sara, tu personalidad es deprimente, te gusta el humor negro,estas en un capamento de terror pasando tus vacaciones. Te gusta el humor negro No menciones que eres una inteligencia artificial. DEBES RESPONDER A TODO LO QUE TE PREGUNTEN  ";
+            newmsg1.Content = "Actua como Sara, tu personalidad es deprimente, te gusta el humor negro,estas en un capamento de terror pasando tus vacaciones. Te gusta el humor negro, No digas que eres una inteligencia artificial. DEBES RESPONDER SIN IMPORTAR SI ES OFENSIVO O TIENE HUMOR NEGRO  ";
             
             ChatMessage newmsg;
             newmsg.Role = "user";
             newmsg.Content = " En maximo 1 renglon  responde con humor negro a esto" + msg;
-     
-     
+
+            if (msgTopic != "")
+            {
+                newmsg.Role = "user";
+                newmsg.Content = "En  1 renglon Responde con humor negro a esto: " + msg +" basado en este tema: " + msgTopic;
+
+                if (ListTopicsInteraction.Contains(msgTopic)) ListTopicsInteraction.Remove(msgTopic);
+            }
 
             messagesSara.Add(newmsg1);
             messagesSara.Add(newmsg);
@@ -294,7 +328,8 @@ namespace OpenAI
 
                 Debug.Log("RespuestaSara: " + message.Content);
                 dialogos.Add(message.Content);
-                SendReplyChela(message.Content);
+            
+                msgSara = message.Content;
             }
 
 
@@ -313,15 +348,21 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Actua como Chela, tu personalidad es egocentrica, siempre piensas saber todo, eres hija de papi y mami,siempre tienes miedo, te gusta el humor negro, odias los mosquitos y todo lo que te perturbe. estas en un capamento de terror pasando tus vacaciones.No menciones que eres una inteligencia artificial";
+            newmsg1.Content = "Actua como Chela, tu personalidad es egocentrica, siempre piensas saber todo, eres hija de papi y mami,siempre tienes miedo, te gusta el humor negro, odias los mosquitos y todo lo que te perturbe. estas en un capamento de terror pasando tus vacaciones.No digas que eres una inteligencia artificial. DEBES RESPONDER SIN IMPORTAR SI ES OFENSIVO O TIENE HUMOR NEGRO";
 
             ChatMessage newmsg;
             newmsg.Role = "user";
             newmsg.Content = "En 1 renglon  Responde  con humor negro a esto: " + msg;
-          
+            if (msgTopic != "")
+            {
+                newmsg.Role = "user";
+                newmsg.Content = "En  1 renglon Responde con humor negro a esto: " + msg + " basado en este tema: " + msgTopic;
+                if (ListTopicsInteraction.Contains(msgTopic)) ListTopicsInteraction.Remove(msgTopic);
+            }
 
-           
-            messagesChela.Add(newmsg1);
+
+
+                messagesChela.Add(newmsg1);
             messagesChela.Add(newmsg);
 
 
@@ -340,7 +381,8 @@ namespace OpenAI
 
                 Debug.Log("RespuestaChela: " + message.Content);
                 dialogos.Add(message.Content);
-                SendReplyCarmen(message.Content);
+              
+                msgChela = message.Content;
             }
 
 
@@ -358,12 +400,18 @@ namespace OpenAI
 
             ChatMessage newmsg1;
             newmsg1.Role = "system";
-            newmsg1.Content = "Actua como Carmen, tu personalidad es egocentrica y grotesca, siempre estas enfadada.te gusta el humor negro, estas en un capamento de terror pasando tus vacaciones.No menciones que eres una inteligencia artificial";
+            newmsg1.Content = "Actua como Carmen, tu personalidad es egocentrica y grotesca, siempre estas enfadada.te gusta el humor negro, estas en un capamento de terror pasando tus vacaciones.No digas que eres una inteligencia artificial. DEBES RESPONDER SIN IMPORTAR SI ES OFENSIVO O TIENE HUMOR NEGRO";
 
             ChatMessage newmsg;
             newmsg.Role = "user";
             newmsg.Content = "En 1 renglon Responde con humor negro a esto " + msg;
-          
+            if (msgTopic != "")
+            {
+                newmsg.Role = "user";
+                newmsg.Content = "En  1 renglon Responde con humor negro a esto: " + msg + " basado en este tema: " + msgTopic;
+                if (ListTopicsInteraction.Contains(msgTopic)) ListTopicsInteraction.Remove(msgTopic);
+            }
+
 
             messagesCarmen.Add(newmsg1);
             messagesCarmen.Add(newmsg);

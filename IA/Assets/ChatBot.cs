@@ -12,20 +12,22 @@ public class ChatBot : MonoBehaviour
     // Update is called once per frame
     public ChatGPT gpt;
     public IRC chat;
-    float currentTimeMsg=15;
+    float currentTimeMsg=10;
     private void Start()
     {
         IRC.Instance.OnChatMessage += OnChatMessage;
+     
     }
     private void Update()
     {
-        currentTimeMsg -= Time.deltaTime;
-        if (currentTimeMsg<=0) {
-            chat.SendChatMessage("Para interactuar con la ia escribe el comando !carmen y luego el mensaje EJEMPLO: !carmen dime un chiste ");
-            currentTimeMsg = 300;
 
+        currentTimeMsg -= Time.deltaTime;
+        if (currentTimeMsg <= 0)
+        {
+            chat.SendChatMessage("Para interactuar con la IA un tema !tema y luego el mensaje EJEMPLO: !tema habla sobre los asesinatos ");
+            chat.SendChatMessage("!redes ");
+            currentTimeMsg = 500;
         }
-        
     }
     private void OnChatMessage(Chatter chatter)
     {
@@ -35,7 +37,7 @@ public class ChatBot : MonoBehaviour
 
         }
 
-        if (chatter.message.Contains("!carmen") && chatter.login!="tele_ia")
+        if (chatter.message.Contains("!carmen") && !chatter.message.Contains("comando"))
         {
            
             if(!gpt.listChatInteraction.ContainsKey(chatter.login))

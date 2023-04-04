@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &24021618254795832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 24021618254795838}
+  - component: {fileID: 24021618254795833}
+  - component: {fileID: 24021618254795837}
+  - component: {fileID: 24021618254795836}
+  - component: {fileID: 24021618254795810}
+  m_Layer: 0
+  m_Name: ChatGPT Variant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &24021618254795838
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24021618254795832}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 848.0951, y: 366.48297, z: 0.75805664}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &24021618254795833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24021618254795832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83764466e83f8aa40b421e5af75b1b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countAnswer: 0
+  timeSpeakingCarmen: 10
+  timeSpeakingChela: 0
+  imageBar: {fileID: 0}
+  speedBar: 100
+  textInteraction: {fileID: 0}
+  animChela: {fileID: 0}
+  animCarmen: {fileID: 0}
+  speedFillImage: 2
+  skin: {fileID: 0}
+  skinChela: {fileID: 0}
+  noticias: []
+  aud: {fileID: 0}
+  audMen: {fileID: 0}
+  VoiceName: Microsoft Server Speech Text to Speech Voice (ca-ES, Herena)
+  promps:
+  - En 4 renglones Narrame una noticia chistosa, que opinas de eso de forma chistosa
+  - Narrame una noticia chistosa da una opinion chistosa al final, no salude al iniciar,
+    no te despidas al finalizar
+  - Narrame una noticia chistosa de latino america da una opinion chistosa al final,
+    busca forma de interactuar con el chat, no saludes, no te despidas
+  - Actua como una presentadora de noticias chistosas e interactua con el chat, no
+    saludes al iniciar el texto, no te despidas al finalizar el texto
+  spk: {fileID: 24021618254795836}
+  speedEyes: 800
+  speedMouth: 800
+  MaxtimeNextNotice: 3
+  answerForChela: Eres tonta o te haces?
+--- !u!114 &24021618254795837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24021618254795832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5907082d48125c43af0cfe08c54cbf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &24021618254795836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24021618254795832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11222982cd0da5048a5b032a719ffd7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 1
+  customProvider: {fileID: 0}
+  customMode: 0
+  eSpeakMode: 0
+  eSpeakApplication: espeak
+  eSpeakDataPath: 
+  eSpeakModifier: 1
+  androidEngine: 
+  autoClearTags: 0
+  caching: 1
+  silenceOnDisable: 0
+  silenceOnFocusLost: 0
+  handleFocus: 1
+  OnReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSpeakStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSpeakCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnProviderChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnError:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &24021618254795810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24021618254795832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591969b575c5238459c0369d322b399d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentTimePrincip: 0
+  currentTimeSecund: 0
+  camActive: {fileID: 0}
+  randTimpePrinMax: 0
+  randTimpeSecunMax: 0
+  player: {fileID: 0}
+  player2: {fileID: 0}
+  speedPlayer: 3

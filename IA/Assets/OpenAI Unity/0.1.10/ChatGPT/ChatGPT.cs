@@ -217,12 +217,20 @@ namespace OpenAI
             SpeakingChela = false;
             animCarmen.SetBool("Start", true);
             animChela.SetBool("Start", false);
+            try
+            {
+                spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"), pitch: 1.4f);
+            }
+            catch (System.Exception)
+            {
+                spk.Speak("Hola", aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"), pitch: 1.4f);
 
-            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Sabina Desktop"),pitch: 1.4f);
+            }
+          
             if (noticias.Contains(message))
             {
                 barShowBool = false;
-               
+                textInteraction.text = "";
                 noticias.Remove(message);
                 
             }
@@ -246,8 +254,16 @@ namespace OpenAI
             animCarmen.SetBool("Start", false);
             animChela.SetBool("Start", true);
 
+            try
+            {
+                spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 2f);
+            }
+            catch (System.Exception)
+            {
 
-            spk.Speak(message, aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 2f);
+                spk.Speak("Hola", aud, Speaker.Instance.VoiceForName("Microsoft Elsa Desktop"), pitch: 1f);
+            }
+            
 
 
 
