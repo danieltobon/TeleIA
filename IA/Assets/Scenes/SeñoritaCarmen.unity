@@ -2696,17 +2696,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eef3c8e909159d469252f6c27e6d176, type: 3}
---- !u!114 &499436299 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 24021618254795833, guid: cad34c23819027347860a964db6a6b57, type: 3}
-  m_PrefabInstance: {fileID: 24021618049490738}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83764466e83f8aa40b421e5af75b1b49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519665326
 GameObject:
   m_ObjectHideFlags: 0
@@ -9177,6 +9166,11 @@ AudioReverbFilter:
   m_LFReference: 250
   m_ReflectionsDelay: 0
   m_ReverbPreset: 3
+--- !u!82 &1701460872 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1701460867, guid: 43c849fbbf19fa64a8b36938755eb228, type: 3}
+  m_PrefabInstance: {fileID: 8117157285759654561}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1707085970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10627,6 +10621,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4465607428753348, guid: 236b4c429fa818247ac2b2f2ff7e5f41, type: 3}
   m_PrefabInstance: {fileID: 1885035553}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1896864131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 24021618254795832, guid: cad34c23819027347860a964db6a6b57, type: 3}
+  m_PrefabInstance: {fileID: 24021618049490738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1896864132 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 24021618254795836, guid: cad34c23819027347860a964db6a6b57, type: 3}
+  m_PrefabInstance: {fileID: 24021618049490738}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896864131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11222982cd0da5048a5b032a719ffd7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1896864136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896864131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b07d878a2482042b83a799bb2a4e8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countAnswer: 0
+  timeSpeakingCarmen: 10
+  timeSpeakingChela: 0
+  imageBar: {fileID: 281027601}
+  speedBar: 100
+  textInteraction: {fileID: 1956368132}
+  animChela: {fileID: 1701460868}
+  animCarmen: {fileID: 1760683325}
+  speedFillImage: 2
+  skin: {fileID: 1883630679}
+  skinChela: {fileID: 2070488266}
+  noticias: []
+  aud: {fileID: 1760683324}
+  audMen: {fileID: 1701460872}
+  VoiceName: 
+  promps: []
+  spk: {fileID: 1896864132}
+  speedEyes: 800
+  speedMouth: 800
+  MaxtimeNextNotice: 3
+  answerForChela: 
 --- !u!1001 &1904835662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11362,7 +11405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1982233913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12386,6 +12429,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 281027601}
     - target: {fileID: 24021618254795833, guid: cad34c23819027347860a964db6a6b57, type: 3}
+      propertyPath: VoiceName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 24021618254795833, guid: cad34c23819027347860a964db6a6b57, type: 3}
       propertyPath: animChela
       value: 
       objectReference: {fileID: 1701460868}
@@ -12445,7 +12492,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 24021618254795833, guid: cad34c23819027347860a964db6a6b57, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cad34c23819027347860a964db6a6b57, type: 3}
 --- !u!4 &221066295562897474
 Transform:
@@ -13610,7 +13658,7 @@ PrefabInstance:
     - target: {fileID: 1916696984157587060, guid: b904bd0b0705460488bc0afa52347b19, type: 3}
       propertyPath: gpt
       value: 
-      objectReference: {fileID: 499436299}
+      objectReference: {fileID: 0}
     - target: {fileID: 1916696984157587060, guid: b904bd0b0705460488bc0afa52347b19, type: 3}
       propertyPath: chat
       value: 

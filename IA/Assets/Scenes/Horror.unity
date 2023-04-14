@@ -3436,6 +3436,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6758712637782722652, guid: 882ccde7d657a0547beee48dc6eebaa1, type: 3}
+      propertyPath: oauth
+      value: bzrssf2wxotzuhcz3ibqmma8a0mv4g
+      objectReference: {fileID: 0}
     - target: {fileID: 6758712637782722653, guid: 882ccde7d657a0547beee48dc6eebaa1, type: 3}
       propertyPath: m_Name
       value: Twitch IRC Variant

@@ -1,0 +1,18 @@
+<linker>
+ <assembly fullname="Unity.Burst">
+  <type fullname="Unity.Burst.LowLevel.BurstCompilerService">
+   <method name="GetOrCreateSharedMemory"/>
+  </type>
+ </assembly>
+ <assembly fullname="Unity.Collections">
+  <type fullname="Unity.Collections.AllocatorManager.SharedStatics.TableEntry">
+   <method name=".cctor"/>
+  </type>
+  <type fullname="Unity.Collections.LowLevel.Unsafe.UnsafeUtility">
+   <method name="Malloc"/>
+  </type>
+  <type fullname="Unity.Collections.LowLevel.Unsafe.UnsafeUtility">
+   <method name="Free"/>
+  </type>
+ </assembly>
+</linker>

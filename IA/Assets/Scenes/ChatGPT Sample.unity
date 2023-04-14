@@ -9154,29 +9154,6 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 8210482652880120953, guid: 43c849fbbf19fa64a8b36938755eb228, type: 3}
   m_PrefabInstance: {fileID: 8117157285759654561}
   m_PrefabAsset: {fileID: 0}
---- !u!164 &1701460870
-AudioReverbFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1701460865}
-  m_Enabled: 1
-  m_DryLevel: 0
-  m_Room: -1000
-  m_RoomHF: -454
-  m_DecayTime: 0.4
-  m_DecayHFRatio: 0.83
-  m_ReflectionsLevel: -1646
-  m_ReverbLevel: 53
-  m_ReverbDelay: 0.003
-  m_Diffusion: 100
-  m_Density: 100
-  m_HFReference: 5000
-  m_RoomLF: 0
-  m_LFReference: 250
-  m_ReflectionsDelay: 0
-  m_ReverbPreset: 3
 --- !u!1001 &1707085970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9906,29 +9883,6 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 7897297274190860476, guid: dd1664dc29598514dab74fdfe117b54b, type: 3}
   m_PrefabInstance: {fileID: 8798761563755749006}
   m_PrefabAsset: {fileID: 0}
---- !u!164 &1760683327
-AudioReverbFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1760683321}
-  m_Enabled: 1
-  m_DryLevel: 0
-  m_Room: -1000
-  m_RoomHF: -454
-  m_DecayTime: 0.4
-  m_DecayHFRatio: 0.83
-  m_ReflectionsLevel: -1646
-  m_ReverbLevel: 53
-  m_ReverbDelay: 0.003
-  m_Diffusion: 100
-  m_Density: 100
-  m_HFReference: 5000
-  m_RoomLF: 0
-  m_LFReference: 250
-  m_ReflectionsDelay: 0
-  m_ReverbPreset: 3
 --- !u!1001 &1767230584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11362,7 +11316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1982233913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14679,6 +14633,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6758712637782722652, guid: 882ccde7d657a0547beee48dc6eebaa1, type: 3}
+      propertyPath: oauth
+      value: oauth:bzrssf2wxotzuhcz3ibqmma8a0mv4g
+      objectReference: {fileID: 0}
     - target: {fileID: 6758712637782722653, guid: 882ccde7d657a0547beee48dc6eebaa1, type: 3}
       propertyPath: m_Name
       value: Twitch IRC
